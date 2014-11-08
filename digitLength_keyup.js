@@ -4,7 +4,8 @@
             // These are the defaults.
             type: '',
             intLen: 0,
-            floatLen: 0
+            floatLen: 0,
+            msg: ''
         }, options);
 
         switch (settings.type) {
@@ -41,6 +42,8 @@
 
             if (len != undefined && len != 0 && (_val.length > len) && isBackspace(keyCode)) {
                 $(this).val(_val.substring(0, len));
+                
+                alertMsg();
             }
         };
 
@@ -49,14 +52,14 @@
             var _val = $(this).val().toString();
 
             if (_val.split('.').length > 2) {
-                $(this).val(_val.substring(0, _val.indexOf(".") + 1));
+                $(this).val(_val.substring(0, _val.lastIndexOf(".")));
             }
 
             if (_val === '.')
             {
                 $(this).val('0.');
             }
-
+            
             if (!onlyNumber(keyCode)) {
                 $(this).val($(this).val().replace(/[^0-9\.]/g, ''));
             }
@@ -75,6 +78,7 @@
                     if (settings.intLen !== 0) {
                         if ($(this).val().length > settings.intLen) {
                             $(this).val($(this).val().substring(0, settings.intLen));
+                            alertMsg();
                         }
                     }
                 } else // float
@@ -87,12 +91,14 @@
                         if (settings.intLen !== 0) {
                             if (int_val.length > settings.intLen) {
                                 int_val = int_val.substring(0, settings.intLen);
+                                alertMsg();
                             }
                         }
 
                         if (settings.floatLen !== 0) {
                             if (float_val.length > settings.floatLen) {
                                 float_val = float_val.substring(0, settings.floatLen);
+                                alertMsg();
                             }
                         }
 
@@ -103,20 +109,11 @@
                 }
             }
         };
+        
+        function alertMsg() {
+            if (settings.msg !== '') {
+                alert(settings.msg);   
+            }
+        };
     }
 })(jQuery);
-
-$(function () {
-    $('#test').digitLength({
-        type: 'fnum',
-        intLen: 2,
-        floatLen: 2
-    });
-    $('#test2').digitLength({
-        type: 'num'
-    });
-    $('#test3').digitLength({
-        type: 'num',
-        intLen: 3
-    });
-});
